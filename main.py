@@ -46,6 +46,8 @@ def index():
 
 if __name__ == "__main__":
 
+    dash_server.risk_matrix("critical", "critical")
+
     # Start background update thread
     run_loop()
 
