@@ -3,4 +3,4 @@
 
 # Custom config
 refresh_seconds = 30
-cases_file = "cases.csv"
+cases_file = "assets/cases.csv"

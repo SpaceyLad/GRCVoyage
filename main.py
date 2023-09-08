@@ -1,9 +1,8 @@
 import csv
 import time as t
-import config as conf
 import threading
 import pandas as pd
-import dash_server
+import dash_logic, calculations, config as conf
 
 
 def import_cases():
@@ -19,10 +18,11 @@ def refresh_msg(c):
 
 def loop():
     global cases
+
     c = 1
     while 1:
         cases = import_cases()
-        dash_server.refresh_dashboard()
+        dash_logic.refresh_dashboard()
         refresh_msg(c)
         c = c + 1
 
@@ -39,17 +39,15 @@ def run_loop():
         print("Error: unable to start thread")
 
 
-@dash_server.server.route("/")
+@dash_logic.server.route("/")
 def index():
     return "Welcome! Visit /dashboard for the dashboard."
 
 
 if __name__ == "__main__":
 
-    dash_server.risk_matrix("critical", "critical")
-
     # Start background update thread
     run_loop()
 
     # Start server
-    dash_server.app.run_server()
+    dash_logic.app.run_server()
