@@ -1,13 +1,11 @@
 import csv
 import time as t
 import threading
-import pandas as pd
-import dash_logic, calculations, config as conf
+import dash_logic
+import config as conf
 
 
 def import_cases():
-    global df
-    df = pd.read_csv(conf.cases_file)
     return csv.reader(open(conf.cases_file, "r"), delimiter=",", quotechar="|")
 
 
@@ -22,7 +20,8 @@ def loop():
     c = 1
     while 1:
         cases = import_cases()
-        dash_logic.refresh_dashboard()
+        dash_logic.sec_refresh_dashboard()
+        dash_logic.org_refresh_dashboard()
         refresh_msg(c)
         c = c + 1
 
@@ -50,4 +49,4 @@ if __name__ == "__main__":
     run_loop()
 
     # Start server
-    dash_logic.app.run_server()
+    dash_logic.server.run()

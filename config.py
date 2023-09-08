@@ -4,3 +4,4 @@
 # Custom config
 refresh_seconds = 30
 cases_file = "assets/cases.csv"
+org_file = "assets/org.csv"
