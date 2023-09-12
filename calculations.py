@@ -1,3 +1,6 @@
+import openai
+
+
 def risk_matrix(risk, impact):
     def convert(number):
         if number == "low":
@@ -32,5 +35,17 @@ def risk_matrix(risk, impact):
     return final_risk
 
 
-def gpt_summary():
-    print("Ey")
+def gpt_summary(data):
+    openai.api_key = "open_ai_key_here"
+    filtered = f"Given the case details, provide a concise and professional security-focused summary suitable for a " \
+               f"Security Engineer. Conclude whether the case requires further attention or is deemed resol" \
+               f"ved. Data: {str(data)}"
+    completion = openai.ChatCompletion.create(
+
+        model="gpt-4",
+        messages=[{"role": "user", "content": filtered}])
+
+    chat_response = completion.choices[0].message.content
+    print(str(chat_response))
+
+    return chat_response

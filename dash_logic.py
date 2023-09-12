@@ -5,6 +5,7 @@ import plotly.express as px
 from flask import Flask, render_template
 import pandas as pd
 import config as conf
+import calculations
 
 # Flask app
 server = Flask(__name__)
@@ -169,6 +170,7 @@ html.Div(id="hidden-div", style={"display": "none"})
 
 
 def org_figures(df):
+
     # Define colors for each risk rating
     color_map = {
         "Low": "green",
@@ -214,9 +216,9 @@ def org_refresh_dashboard():
 
     # Layout for the Dash app
     buttons = html.Div([
-        html.Button(year, id=f'btn-{year}', n_clicks=0) for year in range(2020, 2028)
+        html.Button(year, id=f'btn-{year}', n_clicks=0) for year in range(2020, 2024)
     ])
-    app_sec.layout = html.Div([
+    app_org.layout = html.Div([
         html.Div(id="current-year", style={"display": "none"}, children="2020"),
         html.Div(id="link-container"),
         buttons,
@@ -303,15 +305,12 @@ def org_show_vuln_details(risk_id):
     df = pd.read_csv(conf.org_file)
 
     # Filter dataframe for the given risk_id
-    filtered_df = df[df["Risk ID"] == risk_id]
+    filtered_df = df[df["RiskID"] == risk_id]
 
     # Convert the filtered dataframe to an HTML table
     table_html = filtered_df.to_html(classes="table table-striped", index=False)
 
-    # TODO: Calculate the risk in the matrix and print in header.
-    # risk_matrix(filtered_df[df["Likelihood"]],filtered_df[df["Risk Rating"]])
-    # TODO: Generate a short AI summary with GPT with a button.
-    # gpt_summary()
+    ai_result = calculations.gpt_summary(filtered_df)
 
     # Render the table using the HTML template
-    return render_template("vuln_details.html", table_html=table_html)
+    return render_template("vuln_details.html", table_html=table_html, ai_result=ai_result)
